@@ -1,0 +1,89 @@
+'use client'
+import { useState } from "react";
+
+import Link from "next/link"
+export default function Register(){
+    return(
+        <div 
+            className="min-h-screen flex-col items-center flex-grow"
+        >
+            <h1 
+                className="text-center font-bold text-xl text-white text-center mt-20 mb-5 underline"
+            >
+                Register
+            </h1>
+            <form 
+                className=" space-y-2 border-2 border-white-100 rounded bg-black-100 p-10 w-full max-w-md mx-auto"
+            >
+                <div 
+                    id = "email" 
+                    className="ml-[-8%]"
+                >
+                    <label 
+                      htmlFor="email"
+                    >
+                        Email:
+                    </label>
+                    <input 
+                        type="text" 
+                        name="email" 
+                        className="border border-white-300 rounded p-1 ml-[2%] w-full"
+                        placeholder="Example@gmail.com"
+                    ></input>
+                </div>
+                <div 
+                    id = "password" 
+                    className="ml-[-8%]"
+                >
+                    <label 
+                     htmlFor="password"
+                    >
+                        Password:
+                    </label>
+                    <input 
+                        type="text" 
+                        name="password" 
+                        className="border border-whit-300 rounded p-1 ml-[2%] w-full"
+                        placeholder="Enter password"
+                    ></input>
+                </div>
+                <div 
+                    id = "Re-password" 
+                    className="ml-[-8%]"
+                >
+                    <label 
+                     htmlFor="password"
+                    >
+                        Re-Enter Password:
+                    </label>
+                    <input 
+                        type="text" 
+                        name="password" 
+                        className="border border-whit-300 rounded p-1 ml-[2%] w-full"
+                        placeholder="Re-Enter password"
+                    ></input>
+                </div>
+                <div 
+                    id="Reg-button"
+                >
+                    <button 
+                    className="w-full border border-white-400 rounded text-sm py-2 font-semibold transition cursor-pointer hover:bg-purple-900 mt-2"
+                    >
+                        Submit
+                    </button>
+                </div>
+                <div 
+                className="flex justify-center mt-4"
+                >
+                    <Link
+                        id="reg-link"
+                        href="./login"
+                        className="text-cyan-300 underline cursor-pointer text-sm hover:text-blue-700"
+                    >
+                        Already have an Account?
+                    </Link>
+                </div>
+            </form>
+        </div>
+    );
+}
