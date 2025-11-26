@@ -1,8 +1,48 @@
 'use client'
-import { useState } from "react";
-
+import React, { useState } from "react";
 import Link from "next/link"
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+
 export default function login(){
+    const [email, setEmail] = useState('');
+    const [password, setpassword] = useState('');
+    const router = useRouter();
+    const emailChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setEmail(e.target.value.trim());
+    };
+    const passwordChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setpassword(e.target.value.trim());
+    };
+    const submitAction = async (e: React.FormEvent)=>{
+        e.preventDefault();
+        try{
+            const serverRequest = await fetch("./auth/validate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            });
+            const serverResult = await serverRequest.json();
+            console.log(serverResult);
+            const session = await signIn(
+                "credentials",
+                {
+                    redirect: false,
+                    email,
+                    password
+                }
+            );
+            router.push("/");
+        }
+        catch{
+            console.error("Failed to Log in");
+        }
+    }
     return(
         <div 
             className="min-h-screen flex-col items-center flex-grow"
@@ -14,6 +54,7 @@ export default function login(){
             </h1>
             <form 
                 className=" space-y-2 border-2 border-black-900 rounded bg-white p-10 w-full max-w-md mx-auto text-black"
+                onSubmit={submitAction}
             >
                 <div 
                     id = "email" 
@@ -26,10 +67,12 @@ export default function login(){
                     </label>
                     <input 
                         type="text" 
-                        //value={email}
+                        value={email}
                         name="email" 
                         className="border border-black-300 rounded p-1 ml-[2%] w-full"
                         placeholder="Example@gmail.com"
+                        onChange={emailChange}
+                        required
                     ></input>
                 </div>
                 <div 
@@ -43,10 +86,12 @@ export default function login(){
                     </label>
                     <input 
                         type="text" 
-                        //value={password}
+                        value={password}
                         name="password" 
                         className="border rounded p-1 ml-[2%] w-full"
                         placeholder="Enter password"
+                        onChange={passwordChange}
+                        required
                     ></input>
                 </div>
                 <div 

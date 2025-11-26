@@ -1,8 +1,52 @@
-'use client'
-import { useState } from "react";
-
+"use client"
+import React, { useState } from "react";
 import Link from "next/link"
+import { redirect, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+
 export default function Register(){
+    const [email, setEmail] = useState('');
+    const [password, setpassword] = useState('');
+    const [rePassword, setRePassword] = useState('');
+    const router = useRouter();
+    const emailChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setEmail(e.target.value.trim());
+    };
+    const passwordChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setpassword(e.target.value.trim());
+    };
+    const RePassChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setRePassword(e.target.value.trim());
+    }
+    const submitAction = async (e: React.FormEvent)=>{
+        e.preventDefault();
+        try{
+            const serverRequest = await fetch("/api/auth/register_a", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            });
+            const serverResult = await serverRequest.json();
+            console.log(serverResult);
+            const session = await signIn(
+                "credentials",
+                {
+                    redirect: false,
+                    email,
+                    password
+                }
+            );
+            router.push("/");
+        }
+        catch{
+            console.error("Failed to Register");
+        }
+    }
     return(
         <div 
             className="min-h-screen flex-col items-center flex-grow"
@@ -14,6 +58,7 @@ export default function Register(){
             </h1>
             <form 
                 className=" space-y-2 border-2 border-white-100 rounded bg-black-100 p-10 w-full max-w-md mx-auto"
+                onSubmit={submitAction}
             >
                 <div 
                     id = "email" 
@@ -27,8 +72,11 @@ export default function Register(){
                     <input 
                         type="text" 
                         name="email" 
+                        value={email}
                         className="border border-white-300 rounded p-1 ml-[2%] w-full"
                         placeholder="Example@gmail.com"
+                        required
+                        onChange={emailChange}
                     ></input>
                 </div>
                 <div 
@@ -43,8 +91,11 @@ export default function Register(){
                     <input 
                         type="text" 
                         name="password" 
+                        value={password}
                         className="border border-whit-300 rounded p-1 ml-[2%] w-full"
                         placeholder="Enter password"
+                        required
+                        onChange={passwordChange}
                     ></input>
                 </div>
                 <div 
@@ -59,8 +110,11 @@ export default function Register(){
                     <input 
                         type="text" 
                         name="password" 
+                        value={rePassword}
                         className="border border-whit-300 rounded p-1 ml-[2%] w-full"
                         placeholder="Re-Enter password"
+                        required
+                        onChange={RePassChange}
                     ></input>
                 </div>
                 <div 
