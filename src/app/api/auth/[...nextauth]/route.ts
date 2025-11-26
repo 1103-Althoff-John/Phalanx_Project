@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
   ],
 
   session: {
-    strategy: "jwt", // <-- now valid because authOptions is typed
+    strategy: "jwt", 
     maxAge: 30 * 24 * 60 * 60,
   },
 
