@@ -7,6 +7,7 @@ type Reg_Body = {
     email?: string;
     password?: string;
 };
+
 function sanitize(s:unknown): string{
         if (typeof s !== "string"){
             return("");
@@ -15,6 +16,7 @@ function sanitize(s:unknown): string{
             return (s.replace(/\0/g, "").replace(/<[^>]*>?/gm, "").trim());
         }
 }
+
 function valEmail(email: string): boolean{
     if(!email.includes('@')){
         return false;
@@ -26,6 +28,7 @@ function valEmail(email: string): boolean{
         return true;
     }
 }
+
 export async function POST(request: NextRequest){
     try{
         let body: Reg_Body = {};
@@ -66,7 +69,9 @@ export async function POST(request: NextRequest){
                 )
             );
         }
+
         await connectToDatabase();
+
         //check if already used email
         const exist = await User.findOne({email: emailSan}).lean();
         if(exist){
@@ -80,10 +85,14 @@ export async function POST(request: NextRequest){
         //hash password and create user in db
         const saltRounds = 10;
         const hashed_Password = await bcrypt.hash(password, saltRounds);
-        const newUser = await User.create({email: emailSan, password: hashed_Password});
+        const newUser = await User.create({
+            email: emailSan, 
+            password: hashed_Password
+        });
         return(
             NextResponse.json(
-                {message: "User Registered Successfuly",
+                {
+                    message: "User Registered Successfuly",
                     userId: newUser._id.toString()
                 },
                 {status: 201}

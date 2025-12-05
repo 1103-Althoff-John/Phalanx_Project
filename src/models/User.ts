@@ -1,4 +1,4 @@
-"use server"
+
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IUser extends Document {

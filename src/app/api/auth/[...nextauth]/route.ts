@@ -13,21 +13,23 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
+        if(!credentials?.email || !credentials?.password){
+          return (null);
+        }
         await connectToDatabase();
-
         const email = credentials.email.toLowerCase().trim();
         const user = await User.findOne({ email }).exec();
-        if (!user) return null;
-
+        if(!user){ 
+          return (null);
+        }
         const isValid = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
-        if (!isValid) return null;
-
+        if (!isValid){ 
+          return (null);
+        }
         return {
           id: user._id.toString(),
           email: user.email,

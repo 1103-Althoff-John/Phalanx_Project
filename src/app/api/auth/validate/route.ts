@@ -27,12 +27,16 @@ function valEmail(email: string): boolean{
     }
 }
 export async function POST(request: NextRequest){
+    console.log("validate route hit");
     try{
+        console.log("step1: starting json parse");
         let body: Login = {};
         try{
             body = await request.json();
+            console.log("Step 2: JSON parsed:", body);
         }
         catch(e){
+            console.log("JSON parse failed", e);
             return(
                 NextResponse.json(
                     {error: "Invalid JSON"},
@@ -40,8 +44,9 @@ export async function POST(request: NextRequest){
                 )
             );
         }
+        console.log("step 3: starting validation");
         const emailSan = sanitize(body.email);
-        const password = body.password;
+        const password = body.password || "";
         if(!(emailSan.length > 0)){
             return(
                 NextResponse.json(
@@ -67,8 +72,12 @@ export async function POST(request: NextRequest){
             );
         }
         //after quick checks pass it will connect to db or use existing connection
+        console.log("Step 4: connectiong to data base");
         await connectToDatabase();
+        console.log("step 5: DB connected");
+        console.log("step 6: finding user");
         const user_exist = await User.findOne({email: emailSan}).exec();
+        console.log("query completed: result- ", user_exist);
         if(!user_exist){
             return(
                 NextResponse.json(
@@ -78,10 +87,10 @@ export async function POST(request: NextRequest){
             );
         }
         //will grab stored password and compare 
-        const salt_rounds = 10;
-        const hashed_entry = await bcrypt.hash(password, salt_rounds);
-        const stored_hash = user_exist.password;
-        if(!(hashed_entry === stored_hash)){
+        console.log("step 8: comparing passwords");
+        const isCorrect = await bcrypt.compare(password, user_exist.password);
+        console.log("step 9: compare result: ", isCorrect);
+        if(!isCorrect){
             return(
                 NextResponse.json(
                     {error: "Invalid Credentials"},
@@ -98,8 +107,8 @@ export async function POST(request: NextRequest){
             )
         );
     }
-    catch{
-        console.error("Auth error");
+    catch(err){
+        console.error("Auth error",err);
         return(
             NextResponse.json(
                 {error: "Failed to Authenticate"},

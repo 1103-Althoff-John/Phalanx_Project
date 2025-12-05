@@ -12,12 +12,12 @@ export default function login(){
         setEmail(e.target.value.trim());
     };
     const passwordChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-        setpassword(e.target.value.trim());
+        setpassword(e.target.value);
     };
     const submitAction = async (e: React.FormEvent)=>{
         e.preventDefault();
         try{
-            const serverRequest = await fetch("./auth/validate", {
+            const serverRequest = await fetch("/api/auth/validate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -28,6 +28,9 @@ export default function login(){
                 }),
             });
             const serverResult = await serverRequest.json();
+            if(!serverRequest.ok){
+                return;
+            }
             console.log(serverResult);
             const session = await signIn(
                 "credentials",
@@ -37,6 +40,10 @@ export default function login(){
                     password
                 }
             );
+            console.log("Session: ", session);
+            if(session?.error){
+                return alert("Invalid Credentials");
+            }
             router.push("/");
         }
         catch{
@@ -85,7 +92,7 @@ export default function login(){
                         Password:
                     </label>
                     <input 
-                        type="text" 
+                        type="password" 
                         value={password}
                         name="password" 
                         className="border rounded p-1 ml-[2%] w-full"

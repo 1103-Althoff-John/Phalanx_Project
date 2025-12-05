@@ -13,10 +13,10 @@ export default function Register(){
         setEmail(e.target.value.trim());
     };
     const passwordChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-        setpassword(e.target.value.trim());
+        setpassword(e.target.value);
     };
     const RePassChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-        setRePassword(e.target.value.trim());
+        setRePassword(e.target.value);
     }
     const submitAction = async (e: React.FormEvent)=>{
         e.preventDefault();
@@ -89,7 +89,7 @@ export default function Register(){
                         Password:
                     </label>
                     <input 
-                        type="text" 
+                        type="password" 
                         name="password" 
                         value={password}
                         className="border border-whit-300 rounded p-1 ml-[2%] w-full"
@@ -108,7 +108,7 @@ export default function Register(){
                         Re-Enter Password:
                     </label>
                     <input 
-                        type="text" 
+                        type="password" 
                         name="password" 
                         value={rePassword}
                         className="border border-whit-300 rounded p-1 ml-[2%] w-full"
