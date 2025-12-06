@@ -37,7 +37,9 @@ export default function DemoPage() {
           </div>
           <div>
             <h1 className="title">Add Model</h1>
-            <p className="subtitle">Upload a model file or connect via API endpoint</p>
+            <p className="subtitle">
+              Upload a model file or connect via API endpoint
+            </p>
           </div>
         </div>
       </header>
@@ -83,9 +85,13 @@ export default function DemoPage() {
                 </div>
               </div>
 
-              <p className="drop-main-text">Drag and drop your model file here, or</p>
+              <p className="drop-main-text">
+                Drag and drop your model file here, or
+              </p>
 
-              <button type="button" className="browse-button">browse files</button>
+              <button type="button" className="browse-button">
+                browse files
+              </button>
 
               <p className="drop-sub-text">Maximum file size: 10 GB</p>
             </div>
@@ -94,7 +100,11 @@ export default function DemoPage() {
               <label className="label">
                 Model Name <span className="required">*</span>
               </label>
-              <input className="input" placeholder="e.g., Helios-7B" type="text" />
+              <input
+                className="input"
+                placeholder="e.g., Helios-7B"
+                type="text"
+              />
             </div>
 
             <div className="field">
@@ -118,7 +128,8 @@ export default function DemoPage() {
           <div className="card">
             <h2 className="card-title">Connect via API Endpoint</h2>
             <p className="card-description">
-              Provide your API endpoint details to connect a remote model for analysis.
+              Provide your API endpoint details to connect a remote model for
+              analysis.
             </p>
 
             <div className="field">
@@ -134,11 +145,7 @@ export default function DemoPage() {
 
             <div className="field">
               <label className="label">API Key (Optional)</label>
-              <input
-                className="input"
-                type="text"
-                placeholder="sk-xxxx"
-              />
+              <input className="input" type="text" placeholder="sk-xxxx" />
             </div>
 
             <div className="field">
@@ -159,8 +166,8 @@ export default function DemoPage() {
       </section>
 
       {/* STYLES */}
-      <style jsx>{`
-        :global(body) {
+      <style jsx global>{`
+        body {
           margin: 0;
           font-family: system-ui, sans-serif;
           background: #f5f5f7;
@@ -181,7 +188,7 @@ export default function DemoPage() {
           gap: 16px;
         }
 
-        :global(a.back-button) {
+        a.back-button {
           top: 30px;
           left: 16px;
           font-size: 40px;
@@ -367,25 +374,22 @@ export default function DemoPage() {
           background: #ffffffff;
         }
 
-        :global(a.submit-button) {
-        margin-top: 30px;
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 12px 0;
-        border-radius: 12px;
-        border: 1px solid #000000;
-        background: #000000;
-        color: #ffffff;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: background 0.2s ease;
+        a.submit-button {
+          margin-top: 30px;
+          display: block;
+          width: 100%;
+          text-align: center;
+          padding: 12px 0;
+          border-radius: 12px;
+          border: 1px solid #000000;
+          background: #000000;
+          color: #ffffff;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: none;
+          transition: background 0.2s ease;
         }
-
-
-    
       `}</style>
     </main>
   );
