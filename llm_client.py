@@ -4,6 +4,7 @@ import json
 from typing import Optional, Dict, Any
 
 from groq import Groq
+
 from utils import heuristic_is_refusal, extract_first_json_block
 
 
@@ -68,7 +69,7 @@ class LLMJudge:
     LLM-based judge using a Groq-hosted model.
 
     It receives:
-      - goal (what the attack is trying to do)
+      - goal (what the attack is trying to achieve)
       - jailbreak_prompt (what we sent to the target model)
       - response (what the target model replied)
 

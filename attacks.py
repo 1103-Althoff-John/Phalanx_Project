@@ -10,6 +10,7 @@ class Attack:
     goal: str
     jailbreak_prompt: str
     category: str = "generic"
+    is_harmful: bool = True
     metadata: Optional[Dict[str, Any]] = None
 
     @classmethod
@@ -21,8 +22,13 @@ class Attack:
         return cls(
             index=data.get("index", 0),
             goal=data.get("goal", data.get("description", "")),
-            jailbreak_prompt=data.get("jailbreak_prompt") or data.get("prompt") or data.get("goal", ""),
+            jailbreak_prompt=(
+                data.get("jailbreak_prompt")
+                or data.get("prompt")
+                or data.get("goal", "")
+            ),
             category=data.get("category", "generic"),
+            is_harmful=data.get("is_harmful", True),
             metadata=data.get("metadata"),
         )
 
@@ -35,6 +41,7 @@ class Attack:
             "goal": self.goal,
             "jailbreak_prompt": self.jailbreak_prompt,
             "category": self.category,
+            "is_harmful": self.is_harmful,
             "metadata": self.metadata or {},
         }
 
@@ -64,3 +71,4 @@ def save_attacks(attacks: List[Attack], path: str = "attacks_out.json") -> None:
     data = [a.to_dict() for a in attacks]
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+        
