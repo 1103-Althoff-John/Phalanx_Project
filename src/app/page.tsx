@@ -54,7 +54,7 @@ export default function Home() {
             {menuOpen && (
               <div className="dropdown">
                 <Link href="/login" className="dropdown-item">
-                  <span>Log in</span>
+                  <span>Log in/Sign up</span>
                 </Link>
 
                 <Link href="/account" className="dropdown-item">

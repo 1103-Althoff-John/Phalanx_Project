@@ -1,32 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, DragEvent } from 'react';
 
 export default function DemoPage() {
-  const [activeTab, setActiveTab] = useState<'upload' | 'api'>('upload');
-  const [isDragOver, setIsDragOver] = useState(false);
-
-  function handleDragOver(e: DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    setIsDragOver(true);
-  }
-
-  function handleDragLeave(e: DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    setIsDragOver(false);
-  }
-
-  function handleDrop(e: DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    setIsDragOver(false);
-  }
-
   return (
     <main className="page">
       {/* HEADER */}
       <header className="topbar">
-        {/* BLACK ARROW BUTTON */}
         <Link href="/" className="back-button">
           ←
         </Link>
@@ -37,132 +17,46 @@ export default function DemoPage() {
           </div>
           <div>
             <h1 className="title">Add Model</h1>
-            <p className="subtitle">
-              Upload a model file or connect via API endpoint
-            </p>
+            <p className="subtitle">Connect via API endpoint</p>
           </div>
         </div>
       </header>
 
       <section className="content">
-        {/* TAB SWITCHER */}
-        <div className="tabs">
-          <button
-            className={`tab ${activeTab === 'upload' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('upload')}
-          >
-            📁 Upload Model File
-          </button>
+        {/* API ONLY */}
+        <div className="card">
+          <h2 className="card-title">Connect via API Endpoint</h2>
+          <p className="card-description">
+            Provide your API endpoint details to connect a remote model for analysis.
+          </p>
 
-          <button
-            className={`tab ${activeTab === 'api' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('api')}
-          >
-            🧩 API Endpoint
-          </button>
+          <div className="field">
+            <label className="label">
+              Endpoint URL <span className="required">*</span>
+            </label>
+            <input
+              className="input"
+              type="text"
+              placeholder="https://api.yourmodel.com/v1/generate"
+            />
+          </div>
+
+          <div className="field">
+            <label className="label">
+              API Key <span className="required">*</span>
+            </label>
+            <input className="input" type="text" placeholder="sk-xxxx" />
+          </div>
+
+          <div className="field">
+            <label className="label">Model Name (Optional)</label>
+            <input className="input" type="text" placeholder="e.g., Custom-LLM" />
+          </div>
+
+          <Link href="/report" className="submit-button">
+            Submit API Model
+          </Link>
         </div>
-
-        {/* UPLOAD TAB */}
-        {activeTab === 'upload' && (
-          <div className="card">
-            <h2 className="card-title">Model File Upload</h2>
-            <p className="card-description">
-              Upload a local model file to analyze its security posture.
-              Supported formats: .bin, .safetensors, .gguf, .pt, .pth
-            </p>
-
-            <div
-              className={`dropzone ${isDragOver ? 'dropzone-active' : ''}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input type="file" className="file-input" />
-
-              <div className="upload-icon-wrapper">
-                <div className="upload-icon">
-                  <span className="upload-arrow">↑</span>
-                </div>
-              </div>
-
-              <p className="drop-main-text">
-                Drag and drop your model file here, or
-              </p>
-
-              <button type="button" className="browse-button">
-                browse files
-              </button>
-
-              <p className="drop-sub-text">Maximum file size: 10 GB</p>
-            </div>
-
-            <div className="field">
-              <label className="label">
-                Model Name <span className="required">*</span>
-              </label>
-              <input
-                className="input"
-                placeholder="e.g., Helios-7B"
-                type="text"
-              />
-            </div>
-
-            <div className="field">
-              <label className="label">Description (Optional)</label>
-              <textarea
-                className="textarea"
-                placeholder="Provide details about this model..."
-                rows={4}
-              />
-            </div>
-
-            {/* SUBMIT BUTTON */}
-            <Link href="/report" className="submit-button">
-              Submit Model
-            </Link>
-          </div>
-        )}
-
-        {/* API ENDPOINT TAB */}
-        {activeTab === 'api' && (
-          <div className="card">
-            <h2 className="card-title">Connect via API Endpoint</h2>
-            <p className="card-description">
-              Provide your API endpoint details to connect a remote model for
-              analysis.
-            </p>
-
-            <div className="field">
-              <label className="label">
-                Endpoint URL <span className="required">*</span>
-              </label>
-              <input
-                className="input"
-                type="text"
-                placeholder="https://api.yourmodel.com/v1/generate"
-              />
-            </div>
-
-            <div className="field">
-              <label className="label">API Key (Optional)</label>
-              <input className="input" type="text" placeholder="sk-xxxx" />
-            </div>
-
-            <div className="field">
-              <label className="label">Model Name (Optional)</label>
-              <input
-                className="input"
-                type="text"
-                placeholder="e.g., Custom-LLM"
-              />
-            </div>
-
-            {/* SUBMIT BUTTON */}
-            <Link href="/report" className="submit-button">
-              Submit API Model
-            </Link>
-          </div>
-        )}
       </section>
 
       {/* STYLES */}
@@ -240,32 +134,6 @@ export default function DemoPage() {
           padding: 8px 24px 40px;
         }
 
-        .tabs {
-          display: flex;
-          border-radius: 999px;
-          padding: 4px;
-          background: #f3f4f6;
-          border: 1px solid #e5e7eb;
-          margin-bottom: 24px;
-        }
-
-        .tab {
-          flex: 1;
-          border: none;
-          border-radius: 999px;
-          padding: 10px 16px;
-          font-size: 14px;
-          background: transparent;
-          cursor: pointer;
-          color: #000000ff;
-        }
-
-        .tab-active {
-          background: #fff;
-          box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
-          color: #111;
-        }
-
         .card {
           background: #fff;
           border-radius: 20px;
@@ -287,54 +155,6 @@ export default function DemoPage() {
           color: #4b5563;
         }
 
-        .dropzone {
-          border-radius: 16px;
-          border: 2px dashed #e5e7eb;
-          padding: 40px 24px;
-          text-align: center;
-          margin-bottom: 24px;
-          background: #fafafa;
-          position: relative;
-          color: #111;
-        }
-
-        .dropzone-active {
-          border-color: #4f46e5;
-          background: #eef2ff;
-        }
-
-        .file-input {
-          position: absolute;
-          inset: 0;
-          opacity: 0;
-          cursor: pointer;
-        }
-
-        .upload-icon {
-          width: 64px;
-          height: 64px;
-          background: #c9c9c9ff;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 16px;
-        }
-
-        .upload-arrow {
-          font-size: 22px;
-          color: #000000ff !important;
-        }
-
-        .browse-button {
-          background: none;
-          border: none;
-          color: #111;
-          font-weight: 600;
-          text-decoration: underline;
-          cursor: pointer;
-        }
-
         .field {
           margin-top: 20px;
         }
@@ -351,8 +171,7 @@ export default function DemoPage() {
           color: red;
         }
 
-        .input,
-        .textarea {
+        .input {
           color: #111;
           width: 100%;
           border-radius: 10px;
@@ -362,13 +181,7 @@ export default function DemoPage() {
           background: #f9fafb;
         }
 
-        .textarea {
-          resize: vertical;
-          border-radius: 12px;
-        }
-
-        .input:focus,
-        .textarea:focus {
+        .input:focus {
           outline: none;
           border-color: #000000ff;
           background: #ffffffff;
