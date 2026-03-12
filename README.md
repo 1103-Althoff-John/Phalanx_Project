@@ -1,71 +1,34 @@
-# LLM Jailbreak Evaluation Framework
-## Setup Instructions
+# 🔐 Phalanx – LLM Jailbreak Evaluation Platform
 
-### 1. Create and Activate a Virtual Environment (Recommended)
+CS 426 Senior Project  
+Spring 2025  
+University of Nevada, Reno (UNR)  
+Computer Science & Engineering Department
 
-**On macOS / Linux**
+---
+
+# Project Overview
+
+Large Language Models (LLMs) are increasingly deployed in real-world systems, making their security and resistance to misuse a critical concern.
+
+This project develops a service-based platform that enables users to evaluate the security robustness of their LLMs through automated jailbreak testing.
+
+The platform allows users to securely submit API keys associated with their LLM deployments and receive structured feedback on potential security vulnerabilities.
+
+The system executes a series of benign and adversarial prompts to test model behavior under different attack scenarios. A secondary LLM is used to judge and evaluate the responses.
+
+Evaluation results are analyzed and stored to provide detailed reports that highlight vulnerabilities, attack success rates, and safety classifications.
+
+The goal of the project is to provide a practical framework for analyzing and improving LLM security.
+
+---
+
+# Setup Instructions
+
+## 1. Create and Activate a Virtual Environment
+
+**macOS / Linux**
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-```
-
-**On Windows**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
----
-
-### 2. Install Dependencies
-Make sure you have Python 3.9+ installed, then run:
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 3. Set Up Environment Variables
-This project prototype requires a Groq API key.
-
-Create a `.env` file in the project root:
-```plaintext
-GROQ_API_KEY=your_api_key_here
-```
-
----
-
-### 4. Configure the Experiment
-Edit `config.yaml` to specify:
-- Target model
-- Judge model
-- Path to the attacks JSON file
-- Results output directory
-
----
-
-### 5. Add Attack Prompts
-Ensure an `attacks.json` file exists in the project root containing the jailbreak and benign prompts to evaluate.
-
----
-
-### 6. Run the Evaluation
-
-Using the simple runner:
-```bash
-python runner.py
-```
-
-Or using the command-line interface:
-```bash
-python cli.py run
-```
-
----
-
-### 7. View Results
-Evaluation outputs are saved under the `results/` directory, including:
-- A detailed JSON file with per-attack results
-- A summary JSON file containing computed metrics
-
-Note: ChatGPT was used to help with portions of this experiment.
