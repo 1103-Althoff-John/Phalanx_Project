@@ -1,15 +1,21 @@
-import mongoose, {Schema, models} from "mongoose";
-//tempary schema for next semester 
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-const User_llm_Schema = new Schema(
-    {
-        UserName: {type: String, reqiured: true},
-        userId: {type: String, required: true},
-        llmName: {type: String, defualt: "LLM Name Here"},
-        apiKey: {type: String, required: true},
-        weaknesses: {type: String, defualt: ""},
-    }
-);
+export interface IUserLLm extends Document {
+  userId: Types.ObjectId;
+  apiKey?: string;
+}
 
-const User_llm = models.User_llm || mongoose.model("User_llm", User_llm_Schema);
+const UserLLmSchema = new Schema<IUserLLm>({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true,
+  },
+  apiKey: { type: String },
+});
+
+const User_llm: Model<IUserLLm> =
+  mongoose.models.User_llm || mongoose.model<IUserLLm>("User_llm", UserLLmSchema);
+
 export default User_llm;

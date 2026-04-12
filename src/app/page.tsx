@@ -36,7 +36,6 @@ export default function Home() {
       <header className="header">
         <div className="header-inner">
           <div className="logo">
-            <div className="logo-icon" />
             <span className="logo-text">Phalanx</span>
           </div>
 

@@ -42,12 +42,12 @@ function mapAuthError(payload: ApiErrorPayload): string {
     if (normalized.includes("invalid cred")) return "Invalid email or password. Try again.";
     if (normalized.includes("failed to authenticate")) return "Login failed. Try again.";
 
-    // If you want to show raw server text, return error instead.
     return "Login failed. Try again.";
   }
 
   return "Login failed. Try again.";
 }
+
 
 export default function Login() {
   const [email, setEmail] = useState('');

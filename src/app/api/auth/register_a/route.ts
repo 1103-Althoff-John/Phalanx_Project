@@ -3,6 +3,8 @@ import { NextRequest } from "next/server";
 import bcrypt from "bcrypt"
 import { connectToDatabase } from "@/lib/mongo";
 import User from "@/models/User";
+import User_llm from "@/models/User_LLM";
+import Report from "@/models/Report";
 type Reg_Body = {
     email?: string;
     password?: string;
@@ -76,12 +78,12 @@ export async function POST(request: NextRequest){
             );
         }
         console.log("Step 6: Password has Been Varified to Exist");
+        console.log("Step 8: Validation Fields Passed.... Attempting to Connect to Database....");
 
-        console.log("Step 7: Validation Fields Passed.... Attempting to Connect to Database....");
         await connectToDatabase();
-        console.log("Step 8: Database Connection Succesful");
+        console.log("Step 9: Database Connection Succesful");
         //check if already used email
-        console.log("Step 9: Checking if Account Already Exist...");
+        console.log("Step 10: Checking if Account Already Exist...");
         const exist = await User.findOne({email: emailSan}).lean();
         if(exist){
             return(
@@ -91,7 +93,7 @@ export async function POST(request: NextRequest){
                 )
             );
         }
-        console.log("Step 10: No Other Occorance Of Account. Creating Account");
+        console.log("Step 11: No Other Occorance Of Account. Creating Account");
         //hash password and create user in db
         const saltRounds = 10;
         const hashed_Password = await bcrypt.hash(password, saltRounds);
@@ -99,12 +101,18 @@ export async function POST(request: NextRequest){
             email: emailSan, 
             password: hashed_Password
         });
-        console.log("Step 11: Account password Hashed and Stored. Valuse Returned-- ", emailSan, hashed_Password);
+        const newLLM = await User_llm.create({
+            userId: newUser._id,
+            apiKey: ""
+        });
+        const newReport = await Report.create({
+            userId: newUser._id
+        });
+        console.log("Step 12: Account password Hashed and Stored. Valuse Returned-- ", emailSan, hashed_Password);
         return(
             NextResponse.json(
                 {
-                    message: "User Registered Successfuly",
-                    userId: newUser._id.toString()
+                    message: "User Registered Successfuly"
                 },
                 {status: 201}
             )

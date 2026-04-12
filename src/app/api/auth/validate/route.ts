@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { connectToDatabase } from "../../../../lib/mongo";
 import bcrypt from "bcrypt"
 import User from "../../../../models/User";
+import { signIn } from "next-auth/react";
 type Login = {
     email?: string;
     password?: string;

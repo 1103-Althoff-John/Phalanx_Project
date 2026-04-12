@@ -1,13 +1,21 @@
 'use client';
 
+import { useSession } from "next-auth/react";
+
 export default function AccountSettingsPage() {
+
+  const { data: session } = useSession();
+
+  const user = session?.user as any;
+  const email = user?.email ?? "Not available";
+  const id = user?.id ?? "Not available";
+
   return (
     <main className="settings-page">
       <div className="settings-container">
-        {/* Top title */}
+
         <h1 className="page-title">Settings</h1>
 
-        {/* Header card */}
         <section className="header-card">
           <button
             className="back-button"
@@ -16,56 +24,32 @@ export default function AccountSettingsPage() {
           >
             ←
           </button>
+
           <div className="header-icon">
             <span className="header-icon-inner">🛡️</span>
           </div>
+
           <div className="header-text">
-            <h2 className="header-title">Settings</h2>
+            <h2 className="header-title">Account</h2>
             <p className="header-subtitle">
-              Manage your account and preferences
+              Your account information
             </p>
           </div>
         </section>
 
-        {/* Account information card */}
         <section className="card">
           <h3 className="card-title">Account Information</h3>
 
           <div className="field-group">
-            <label className="field-label">Full Name</label>
-            <input
-              className="field-input"
-              type="text"
-              defaultValue="Blank"
-            />
-          </div>
-
-          <div className="field-group">
             <label className="field-label">Email Address</label>
-            <input
-              className="field-input"
-              type="email"
-              defaultValue="Blank@phalanx.com"
-            />
+            <div className="field-value">{email}</div>
           </div>
 
-          <div className="field-group">
-            <label className="field-label">Company</label>
-            <input
-              className="field-input"
-              type="text"
-              defaultValue="Blank Security Inc."
-            />
-          </div>
-
-          <div className="button-row">
-            <button className="btn-primary">✔ Save Changes</button>
-            <button className="btn-ghost">Cancel</button>
-          </div>
+         
         </section>
+
       </div>
 
-      {}
       <style jsx global>{`
         body {
           margin: 0;
@@ -154,7 +138,6 @@ export default function AccountSettingsPage() {
           border: 1px solid #e5e7eb;
           padding: 20px 24px 24px;
           box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-          margin-bottom: 18px;
         }
 
         .card-title {
@@ -173,52 +156,11 @@ export default function AccountSettingsPage() {
           margin-bottom: 4px;
         }
 
-        .field-input {
-          width: 100%;
+        .field-value {
           padding: 10px 12px;
           border-radius: 9999px;
-          border: none;
           background: #f3f4f6;
           font-size: 14px;
-          outline: none;
-        }
-
-        .field-input:focus {
-          box-shadow: 0 0 0 1px #111827;
-          background: #f9fafb;
-        }
-
-        .button-row {
-          display: flex;
-          gap: 8px;
-          margin-top: 12px;
-        }
-
-        .btn-primary {
-          border-radius: 9999px;
-          border: none;
-          padding: 8px 16px;
-          background: #020617;
-          color: #ffffff;
-          font-size: 14px;
-          cursor: pointer;
-        }
-
-        .btn-primary:hover {
-          background: #0f172a;
-        }
-
-        .btn-ghost {
-          border-radius: 9999px;
-          border: 1px solid #e5e7eb;
-          padding: 8px 16px;
-          background: #ffffff;
-          font-size: 14px;
-          cursor: pointer;
-        }
-
-        .btn-ghost:hover {
-          background: #f9fafb;
         }
 
         @media (max-width: 768px) {

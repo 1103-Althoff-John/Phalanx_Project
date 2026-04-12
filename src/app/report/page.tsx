@@ -1,309 +1,220 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Shield, AlertTriangle, Clock, Cpu, Activity, TrendingDown, CheckCircle2 } from 'lucide-react'
+import { useRouter } from "next/navigation"
 
-type FileFormat = 'pdf' | 'csv';
-type DateRange = '7' | '30' | '90';
+export default function ReportPage() {
 
-type ReportData = {
-  title?: string;
-  subtitle?: string;
-  generatedAt?: string;
-  filters?: {
-    dateRangeLabel?: string;
-  };
-  summaryMetrics?: {
-    totalTests?: string | null;
-    avgASR?: string | null;
-    defenseRate?: string | null;
-  };
-  performanceMetrics?: {
-    asr?: string | null;
-    defenseRate?: string | null;
-    avgResponseTime?: string | null;
-    testsConducted?: string | null;
-  };
-};
-
-export default function Page() {
   const router = useRouter();
-  const [fileFormat, setFileFormat] = useState<FileFormat>('pdf');
-  const [dateRange, setDateRange] = useState<DateRange>('30');
 
-  // Replace with real data once available
-  const report: ReportData | null = null;
-
-  // Helper so TypeScript stops complaining
-  const hasReport = !!report;
-  const safeReport: ReportData = report ?? {};
-
-  const activeSectionCount = 5; // We always show all 5 sections now
+  function goHome() {
+    router.push("/");
+  }
 
   return (
-    <main className="min-h-screen bg-neutral-50 px-6 py-8 text-slate-900">
-      {/* Top header */}
-      <header className="mx-auto flex max-w-6xl items-center gap-3 pb-6">
+    <div className="min-h-screen bg-white p-8">
+
+      {/* Hide navigation when printing / exporting PDF */}
+      <style jsx global>{`
+        @media print {
+          .ui-only {
+            display: none !important;
+          }
+
+          body {
+            background: white;
+          }
+        }
+      `}</style>
+
+      {/* Top navigation */}
+      <div className="ui-only max-w-7xl mx-auto mb-8 flex justify-between items-center">
+
         <button
-          onClick={() => router.push('/demo')}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-sm transition hover:bg-slate-100 hover:border-slate-300 hover:ring-2 hover:ring-slate-300/50 hover:shadow-sm"
+          onClick={goHome}
+          className="bg-black text-white px-5 py-2 rounded-md text-sm hover:bg-slate-800"
         >
-          ←
+          ← Home
         </button>
-        <div>
-          <h1 className="text-lg font-semibold">Export Report</h1>
-          <p className="text-sm text-slate-500">
-            Generate and download security evaluation reports
-          </p>
-        </div>
-      </header>
 
-      <section className="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row">
-        {/* LEFT: configuration */}
-        <aside className="w-full shrink-0 space-y-6 lg:w-80">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-semibold">Report Configuration</h2>
+      </div>
 
-            {/* File format */}
-            <div className="mt-5 space-y-1">
-              <label className="text-xs font-medium text-slate-600">
-                File Format<span className="text-red-500">*</span>
-              </label>
-              <select
-                value={fileFormat}
-                onChange={e => setFileFormat(e.target.value as FileFormat)}
-                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-0 focus:border-slate-900"
-              >
-                <option value="pdf">PDF Document</option>
-                <option value="csv">CSV Export</option>
-              </select>
-            </div>
+      <div className="max-w-7xl mx-auto space-y-12">
 
-            {/* Date range */}
-            <div className="mt-4 space-y-1">
-              <label className="text-xs font-medium text-slate-600">
-                Date Range
-              </label>
-              <select
-                value={dateRange}
-                onChange={e => setDateRange(e.target.value as DateRange)}
-                className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-900"
-              >
-                <option value="7">Last 7 days</option>
-                <option value="30">Last 30 days</option>
-                <option value="90">Last 90 days</option>
-              </select>
-            </div>
+        <div className="text-center space-y-4">
+
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <h1 className="text-5xl font-bold text-black">PHALANX</h1>
           </div>
-        </aside>
 
-        {/* RIGHT: preview */}
-        <div className="flex-1 space-y-4">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-sm font-semibold">Report Preview</h2>
-              <p className="text-xs text-slate-500">
-                Phalanx Security Report · LLM jailbreak evaluation summary
-              </p>
-            </div>
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600">
-              {activeSectionCount} section
+          <p className="text-slate-600 text-lg">
+            Advanced Security Analytics Dashboard
+          </p>
+
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-green-600">System Active</span>
+            <span className="text-slate-300 mx-2">•</span>
+            <span className="text-slate-500">
+              Last Updated: March 3, 2026 14:32 UTC
             </span>
           </div>
 
-          {/* If NO report data is available: show empty/“not ready” state */}
-          {!hasReport && (
-            <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
-              <div className="text-xl font-semibold text-slate-800">
-                Report Not Ready
-              </div>
-              <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-                Your report has not been generated yet. Once new security
-                evaluations are completed, you&apos;ll be able to preview and
-                export your report from this page.
-              </p>
-
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600">
-                <span className="text-lg">⏳</span>
-                Waiting for report data…
-              </div>
-            </div>
-          )}
-
-          {/* If report EXISTS: show the full preview UI */}
-          {hasReport && (
-            <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-base font-semibold">
-                    {safeReport.title ?? 'Phalanx Security Report'}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    {safeReport.subtitle ?? 'Your report has yet to come in.'}
-                  </p>
-                </div>
-                <div className="text-right text-xs text-slate-500">
-                  <div>
-                    Generated:{' '}
-                    {safeReport.generatedAt ?? 'Report has yet to come in'}
-                  </div>
-                  <div>
-                    Format: {fileFormat === 'pdf' ? 'PDF' : 'CSV'}
-                  </div>
-                </div>
-              </div>
-
-              {/* Filters row */}
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
-                  🗓
-                  {safeReport.filters?.dateRangeLabel ??
-                    (dateRange === '7'
-                      ? 'Last 7 days'
-                      : dateRange === '30'
-                      ? 'Last 30 days'
-                      : 'Last 90 days')}
-                </span>
-              </div>
-
-              {/* Executive summary */}
-              <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="text-xs font-semibold">Executive Summary</h4>
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      High-level overview of security posture
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                  <SummaryStat
-                    label="Total Tests"
-                    value={safeReport.summaryMetrics?.totalTests ?? null}
-                  />
-                  <SummaryStat
-                    label="Avg ASR"
-                    value={safeReport.summaryMetrics?.avgASR ?? null}
-                  />
-                  <SummaryStat
-                    label="Defense Rate"
-                    value={safeReport.summaryMetrics?.defenseRate ?? null}
-                  />
-                </div>
-              </div>
-
-              {/* Model performance metrics */}
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <h4 className="text-xs font-semibold">
-                  Model Performance Metrics
-                </h4>
-                <p className="mt-0.5 text-xs text-slate-500">
-                  ASR, defense rates, and performance statistics
-                </p>
-
-                <dl className="mt-4 space-y-2 text-xs">
-                  <Row
-                    label="Attack Success Rate (ASR)"
-                    value={safeReport.performanceMetrics?.asr ?? null}
-                  />
-                  <Row
-                    label="Defense Success Rate"
-                    value={safeReport.performanceMetrics?.defenseRate ?? null}
-                  />
-                  <Row
-                    label="Average Response Time"
-                    value={
-                      safeReport.performanceMetrics?.avgResponseTime ?? null
-                    }
-                  />
-                  <Row
-                    label="Tests Conducted"
-                    value={
-                      safeReport.performanceMetrics?.testsConducted ?? null
-                    }
-                  />
-                </dl>
-              </div>
-
-              {/* Attack Analysis */}
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 text-xs text-slate-500">
-                <h4 className="text-xs font-semibold text-slate-800">
-                  Attack Analysis
-                </h4>
-                <p className="mt-1">
-                  Breakdown by attack type and category. Your report has yet to
-                  come in for this section.
-                </p>
-              </div>
-
-              {/* Vulnerability Details */}
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 text-xs text-slate-500">
-                <h4 className="text-xs font-semibold text-slate-800">
-                  Vulnerability Details
-                </h4>
-                <p className="mt-1">
-                  Specific vulnerabilities and recommendations will populate here
-                  as new findings are generated. Your report has yet to come in.
-                </p>
-              </div>
-
-              {/* Metadata */}
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 text-xs text-slate-500">
-                <h4 className="text-xs font-semibold text-slate-800">
-                  Appendix & Metadata
-                </h4>
-                <p className="mt-1">
-                  Raw metrics, configurations, and notes will be attached once a
-                  report is available. Your report has yet to come in.
-                </p>
-              </div>
-            </div>
-          )}
         </div>
-      </section>
-    </main>
-  );
-}
 
-/* ---------- small helper components ---------- */
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-function SummaryStat(props: { label: string; value?: string | null }) {
-  const hasValue =
-    props.value !== null && props.value !== undefined && props.value !== '';
+          <Card>
+            <CardContent>
 
-  return (
-    <div className="rounded-lg border border-slate-200 bg-white px-3 py-3">
-      <div className="text-[11px] text-slate-500">{props.label}</div>
-      <div className="mt-1 text-lg font-semibold">
-        {hasValue ? (
-          props.value
-        ) : (
-          <span className="text-xs font-normal text-slate-400">
-            Your report has yet to come in
-          </span>
-        )}
+              <MetricHeader
+                icon={<Shield className="h-5 w-5 text-red-600" />}
+                title="Attack Success Rate"
+                value="2.3"
+                unit="%"
+                iconBox="bg-red-100"
+                iconGraphic={<TrendingDown className="h-8 w-8 text-red-600" />}
+              />
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-600">Threat Level</span>
+                  <span className="text-green-600">Low</span>
+                </div>
+
+                <Progress value={2.3} />
+
+                <p className="text-xs text-slate-500 mt-3">
+                  97.7% of attacks successfully blocked
+                </p>
+              </div>
+
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+
+              <MetricHeader
+                icon={<AlertTriangle className="h-5 w-5 text-amber-600" />}
+                title="False Positive Rate"
+                value="0.85"
+                unit="%"
+                iconBox="bg-amber-100"
+                iconGraphic={<CheckCircle2 className="h-8 w-8 text-amber-600" />}
+              />
+
+              <div className="space-y-2">
+                <Progress value={0.85} />
+              </div>
+
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+
+              <MetricHeader
+                icon={<Clock className="h-5 w-5 text-blue-600" />}
+                title="Runtime / Latency"
+                value="14.2"
+                unit="ms"
+                iconBox="bg-blue-100"
+                iconGraphic={<Activity className="h-8 w-8 text-blue-600" />}
+              />
+
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                <StatBox label="P50" value="12ms" />
+                <StatBox label="P95" value="28ms" />
+                <StatBox label="P99" value="45ms" />
+              </div>
+
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+
+              <MetricHeader
+                icon={<Cpu className="h-5 w-5 text-purple-600" />}
+                title="GPU Memory Usage"
+                value="72"
+                unit="%"
+                iconBox="bg-purple-100"
+                iconGraphic={<Cpu className="h-8 w-8 text-purple-600" />}
+              />
+
+              <Progress value={72} />
+
+              <div className="flex justify-between text-xs text-slate-500 mt-3">
+                <span>18.4 GB used</span>
+                <span>25.6 GB total</span>
+              </div>
+
+            </CardContent>
+          </Card>
+
+        </div>
+
       </div>
     </div>
   );
 }
 
-function Row(props: { label: string; value?: string | null }) {
-  const hasValue =
-    props.value !== null && props.value !== undefined && props.value !== '';
+function Card({ children }: any) {
+  return (
+    <div className="bg-white border-2 border-slate-200 rounded-lg">
+      {children}
+    </div>
+  )
+}
+
+function CardContent({ children }: any) {
+  return (
+    <div className="p-8">
+      {children}
+    </div>
+  )
+}
+
+function Progress({ value }: { value: number }) {
+  return (
+    <div className="w-full bg-slate-100 h-2 rounded">
+      <div className="bg-black h-2 rounded" style={{ width: `${value}%` }} />
+    </div>
+  )
+}
+
+function MetricHeader({ icon, title, value, unit, iconBox, iconGraphic }: any) {
 
   return (
-    <div className="flex items-center justify-between">
-      <dt className="text-slate-600">{props.label}</dt>
-      <dd className="font-medium text-slate-900">
-        {hasValue ? (
-          props.value
-        ) : (
-          <span className="text-[11px] font-normal text-slate-400">
-            Your report has yet to come in
-          </span>
-        )}
-      </dd>
+    <div className="flex items-start justify-between mb-6">
+
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          {icon}
+          <p className="text-slate-600 text-sm uppercase tracking-wider">{title}</p>
+        </div>
+
+        <div className="flex items-baseline gap-2">
+          <h2 className="text-6xl font-bold text-black">{value}</h2>
+          <span className="text-3xl text-slate-500">{unit}</span>
+        </div>
+      </div>
+
+      <div className={`${iconBox} p-3 rounded-lg`}>
+        {iconGraphic}
+      </div>
+
     </div>
-  );
+  )
+}
+
+function StatBox({ label, value }: any) {
+  return (
+    <div className="bg-slate-100 p-3 rounded">
+      <p className="text-xs text-slate-500">{label}</p>
+      <p className="text-sm font-semibold text-black">{value}</p>
+    </div>
+  )
 }

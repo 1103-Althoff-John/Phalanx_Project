@@ -1,20 +1,56 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function DemoPage() {
+  const [apiKey, setApiKey] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  async function handleConnect() {
+    setLoading(true);
+    setMessage('');
+    setError('');
+
+    try {
+      const res = await fetch('/api/User_llm/create/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ apiKey }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Failed to connect API key');
+        return;
+      }
+
+      setMessage(data.message || 'API key saved successfully');
+      setApiKey('');
+    } catch (err) {
+      setError('Something went wrong while connecting the API key');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function downloadReport() {
+    window.open('/api/report');
+  }
+
   return (
     <main className="page">
-      {/* HEADER */}
       <header className="topbar">
         <Link href="/" className="back-button">
           ←
         </Link>
 
         <div className="title-block">
-          <div className="logo-icon">
-            <span className="shield" />
-          </div>
           <div>
             <h1 className="title">Add Model</h1>
             <p className="subtitle">Connect via API endpoint</p>
@@ -23,7 +59,6 @@ export default function DemoPage() {
       </header>
 
       <section className="content">
-        {/* API ONLY */}
         <div className="card">
           <h2 className="card-title">Connect via API Endpoint</h2>
           <p className="card-description">
@@ -32,34 +67,44 @@ export default function DemoPage() {
 
           <div className="field">
             <label className="label">
-              Endpoint URL <span className="required">*</span>
+              API Key <span className="required">*</span>
             </label>
             <input
               className="input"
               type="text"
-              placeholder="https://api.yourmodel.com/v1/generate"
+              placeholder="sk-xxxx"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
             />
           </div>
 
-          <div className="field">
-            <label className="label">
-              API Key <span className="required">*</span>
-            </label>
-            <input className="input" type="text" placeholder="sk-xxxx" />
-          </div>
+          {message && <p className="success-message">{message}</p>}
+          {error && <p className="error-message">{error}</p>}
 
-          <div className="field">
-            <label className="label">Model Name (Optional)</label>
-            <input className="input" type="text" placeholder="e.g., Custom-LLM" />
-          </div>
+          <div className="button-row">
+            <button
+              onClick={handleConnect}
+              className="view-button"
+              disabled={loading || !apiKey.trim()}
+            >
+              {loading ? 'Connecting...' : 'Save API Key'}
+            </button>
 
-          <Link href="/report" className="submit-button">
-            Submit API Model
-          </Link>
+            <Link href="/report" className="view-button secondary-button">
+              Create Report
+            </Link>
+
+            <button
+              onClick={downloadReport}
+              className="download-button"
+              disabled={loading}
+            >
+              Download Report
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* STYLES */}
       <style jsx global>{`
         body {
           margin: 0;
@@ -98,34 +143,17 @@ export default function DemoPage() {
           gap: 12px;
         }
 
-        .logo-icon {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: #020617;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .shield {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          border: 2px solid #ffffffff;
-        }
-
         .title {
           margin: 0;
           font-size: 24px;
           font-weight: 600;
-          color: #000000ff;
+          color: #000;
         }
 
         .subtitle {
           margin: 2px 0 0;
           font-size: 13px;
-          color: #000000ff;
+          color: #000;
         }
 
         .content {
@@ -146,7 +174,7 @@ export default function DemoPage() {
           margin: 0 0 8px;
           font-size: 18px;
           font-weight: 600;
-          color: #000000ff;
+          color: #000;
         }
 
         .card-description {
@@ -172,6 +200,7 @@ export default function DemoPage() {
         }
 
         .input {
+          box-sizing: border-box;
           color: #111;
           width: 100%;
           border-radius: 10px;
@@ -183,25 +212,73 @@ export default function DemoPage() {
 
         .input:focus {
           outline: none;
-          border-color: #000000ff;
-          background: #ffffffff;
+          border-color: #000;
+          background: #fff;
         }
 
-        a.submit-button {
+        .button-row {
           margin-top: 30px;
-          display: block;
-          width: 100%;
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .view-button {
+          flex: 1;
           text-align: center;
           padding: 12px 0;
           border-radius: 12px;
-          border: 1px solid #000000;
-          background: #000000;
-          color: #ffffff;
+          border: 1px solid #000;
+          background: #000;
+          color: #fff;
+          font-size: 15px;
+          font-weight: 600;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .view-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .secondary-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .download-button {
+          flex: 1;
+          padding: 12px 0;
+          border-radius: 12px;
+          border: 1px solid #000;
+          background: #fff;
+          color: #000;
           font-size: 15px;
           font-weight: 600;
           cursor: pointer;
-          text-decoration: none;
-          transition: background 0.2s ease;
+        }
+
+        .download-button:hover {
+          background: #f3f4f6;
+        }
+
+        .download-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .success-message {
+          margin-top: 16px;
+          color: #166534;
+          font-size: 14px;
+        }
+
+        .error-message {
+          margin-top: 16px;
+          color: #b91c1c;
+          font-size: 14px;
         }
       `}</style>
     </main>

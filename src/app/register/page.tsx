@@ -33,14 +33,17 @@ export default function Register(){
             });
             const serverResult = await serverRequest.json();
             console.log(serverResult);
-            const session = await signIn(
-                "credentials",
-                {
-                    redirect: false,
-                    email,
-                    password
-                }
-            );
+            const session = await signIn("credentials", {
+                redirect: false,
+                email,
+                password,
+              });
+        
+              // next-auth returns errors as strings; map them to a safe message
+              if (session?.error) {
+                return;
+              }
+        
             router.push("/");
         }
         catch{
