@@ -91,3 +91,14 @@ Phalanx is currently in active development as part of the CS 426 Senior Project 
 
 Project repository:  
 [Phalanx Project GitHub Repository](https://github.com/1103-Althoff-John/Phalanx_Project/blob/main/README.md)
+
+---
+
+## Setup Instructions
+
+### 1. Create and Activate a Virtual Environment
+
+**macOS / Linux**
+```bash
+python3 -m venv venv
+source venv/bin/activate
