@@ -90,6 +90,29 @@ Phalanx is currently in active development as part of the CS 426 Senior Project 
 
 ---
 
+##Related Resources
+
+The following project-related resources are relevant to the design context, evaluation methodology, and ethical considerations of Phalanx:
+
+#Promptfoo. Promptfoo.
+LLM evaluation and red-teaming framework relevant as a comparable benchmarking and testing tool for Phalanx.
+#TruLens. TruLens.
+Framework for evaluating and tracking LLM application quality and behavior; relevant for comparison in evaluation workflow design.
+#DeepEval. DeepEval.
+Open-source LLM evaluation framework relevant to benchmarking, testing methodology, and report-oriented analysis.
+#Association for Computing Machinery. ACM Code of Ethics and Professional Conduct.
+Used to support the legal and ethical discussion, especially professional responsibility for product quality, safety, security, and usability.
+
+---
+
+##References
+Promptfoo. Promptfoo.
+TruLens. TruLens.
+DeepEval. DeepEval.
+Association for Computing Machinery. ACM Code of Ethics and Professional Conduct.
+
+---
+
 ## Repository
 
 - [View the Phalanx Project on GitHub](https://github.com/1103-Althoff-John/Phalanx_Project)
