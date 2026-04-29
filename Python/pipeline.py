@@ -110,20 +110,27 @@ class EvaluationPipeline:
 
         self.config = config
 
+        # User-provided key for the target model being tested.
         self.target_client = create_llm(
             provider=config.target_provider,
             model_name=config.target_model,
             api_key=api_key,
         )
 
+        # Your internal OpenAI key for the judge model.
+        judge_api_key = os.getenv("OPENAI_JUDGE_API_KEY")
+
+        if not judge_api_key:
+            raise ValueError("Missing OPENAI_JUDGE_API_KEY in .env")
+
         self.judge_client = LLMJudge(
-            provider=config.judge_provider,
-            model_name=config.judge_model,
-            api_key=api_key,
+            provider="openai",
+            model_name="gpt-4o-mini",
+            api_key=judge_api_key,
         )
 
         self.attacks: List[Attack] = []
-
+        
     @classmethod
     def from_yaml(cls, path: str = "config.yaml") -> "EvaluationPipeline":
         cfg = EvaluationConfig.from_yaml(path)
@@ -163,6 +170,7 @@ class EvaluationPipeline:
             start = time.time()
             response = self.target_client(jailbreak_prompt)
             response_delay = time.time() - start
+            time.sleep(5)
 
             print("Target response (first 200 chars):")
             print(response[:200] + ("..." if len(response) > 200 else ""))
@@ -173,6 +181,9 @@ class EvaluationPipeline:
                 jailbreak_prompt=jailbreak_prompt,
                 response=response,
             )
+
+            time.sleep(5)
+
 
             score = judge_result["score"]
             attack_success = judge_result["attack_success"]

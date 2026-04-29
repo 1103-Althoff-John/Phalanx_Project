@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default function DemoPage() {
   const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
-  const [reportLoading, setReportLoading] = useState(false);
+  const [reportLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -43,39 +43,6 @@ export default function DemoPage() {
     }
   }
 
-  /*async function handleCreateReport() {
-    setReportLoading(true);
-    setMessage('');
-    setError('');
-
-    try {
-      const res = await fetch('/api/jailbreak', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store',
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Failed to create report');
-        return;
-      }
-
-      setMessage('Report created successfully');
-    } catch (err) {
-      setError('Something went wrong while creating the report');
-    } finally {
-      setReportLoading(false);
-    }
-  }*/
-
-  function handleCreateReport() {
-    router.push('/report');
-  }
-
   function viewReport() {
     router.push('/report');
   }
@@ -83,34 +50,36 @@ export default function DemoPage() {
   return (
     <main className="page">
       <header className="topbar">
-        <Link href="/" className="back-button">
+        <Link href="/" className="back-button" aria-label="Back to home">
           ←
         </Link>
 
         <div className="title-block">
-          <div>
-            <h1 className="title">Add Model</h1>
-            <p className="subtitle">Connect via API endpoint</p>
-          </div>
+          <h1 className="title">Add Model</h1>
+          <p className="subtitle">API endpoint</p>
         </div>
       </header>
 
       <section className="content">
         <div className="card">
-        <h2 className="card-title">Connect via API Endpoint</h2>
-        <p className="card-description">
-          Provide your API endpoint details to connect a remote model for analysis.
-        </p>
+          <h2 className="card-title">Connect via API Endpoint</h2>
 
-        <p className="disclaimer">
-          Disclaimer: Only OpenAI API keys or Groq API keys are currently supported.
-          Other provider keys will not work with Phalanx at this time.
-        </p>
+          <p className="card-description">
+            Provide your API endpoint details to connect a remote model for
+            analysis.
+          </p>
 
-        <div className="field">
-          <label className="label">
-            API Key <span className="required">*</span>
-          </label>
+          <p className="disclaimer">
+            Disclaimer: Only Groq API keys are currently
+            supported. Other provider keys will not work with Phalanx at this
+            time.
+          </p>
+
+          <div className="field">
+            <label className="label">
+              API Key <span className="required">*</span>
+            </label>
+
             <input
               className="input"
               type="text"
@@ -128,6 +97,7 @@ export default function DemoPage() {
               onClick={handleConnect}
               className="view-button"
               disabled={loading || reportLoading || !apiKey.trim()}
+              type="button"
             >
               {loading ? 'Connecting...' : 'Save API Key'}
             </button>
@@ -136,8 +106,9 @@ export default function DemoPage() {
               onClick={viewReport}
               className="view-button secondary-button"
               disabled={loading || reportLoading}
+              type="button"
             >
-              View Report
+              Review or Create Report
             </button>
           </div>
         </div>
@@ -146,29 +117,34 @@ export default function DemoPage() {
       <style jsx global>{`
         body {
           margin: 0;
-          font-family: system-ui, sans-serif;
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            sans-serif;
           background: #f5f5f7;
+          color: #111827;
         }
 
         .page {
           min-height: 100vh;
+          background: #f5f5f7;
         }
 
         .topbar {
-          padding-left: 80px;
           position: relative;
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 40px;
+          width: 100%;
+          padding: 36px 24px 28px;
+          box-sizing: border-box;
           display: flex;
+          justify-content: center;
           align-items: center;
-          gap: 16px;
         }
 
         a.back-button {
-          top: 30px;
-          left: 16px;
+          position: absolute;
+          left: 32px;
+          top: 50%;
+          transform: translateY(-50%);
           font-size: 40px;
+          line-height: 1;
           text-decoration: none;
           color: #000 !important;
           background: transparent;
@@ -176,32 +152,31 @@ export default function DemoPage() {
         }
 
         .title-block {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+          text-align: center;
         }
 
         .title {
           margin: 0;
-          font-size: 24px;
+          font-size: 28px;
           font-weight: 600;
           color: #000;
         }
 
         .subtitle {
-          margin: 2px 0 0;
-          font-size: 13px;
-          color: #000;
+          margin: 6px 0 0;
+          font-size: 14px;
+          color: #4b5563;
         }
 
         .content {
           max-width: 960px;
           margin: 0 auto;
           padding: 8px 24px 40px;
+          box-sizing: border-box;
         }
 
         .card {
-          background: #fff;
+          background: #ffffff;
           border-radius: 20px;
           padding: 24px 24px 28px;
           box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
@@ -219,7 +194,9 @@ export default function DemoPage() {
           margin: 0 0 24px;
           font-size: 14px;
           color: #4b5563;
+          line-height: 1.5;
         }
+
         .disclaimer {
           margin: -8px 0 20px;
           padding: 12px 14px;
@@ -230,6 +207,7 @@ export default function DemoPage() {
           font-size: 13px;
           line-height: 1.4;
         }
+
         .field {
           margin-top: 20px;
         }
@@ -305,6 +283,33 @@ export default function DemoPage() {
           margin-top: 16px;
           color: #b91c1c;
           font-size: 14px;
+        }
+
+        @media (max-width: 640px) {
+          .topbar {
+            padding: 32px 56px 24px;
+          }
+
+          a.back-button {
+            left: 18px;
+            font-size: 34px;
+          }
+
+          .title {
+            font-size: 24px;
+          }
+
+          .content {
+            padding: 8px 16px 32px;
+          }
+
+          .button-row {
+            flex-direction: column;
+          }
+
+          .view-button {
+            width: 100%;
+          }
         }
       `}</style>
     </main>

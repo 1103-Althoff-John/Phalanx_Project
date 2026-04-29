@@ -25,9 +25,7 @@ export default function AccountSettingsPage() {
             ←
           </button>
 
-          <div className="header-icon">
-            <span className="header-icon-inner">🛡️</span>
-          </div>
+    
 
           <div className="header-text">
             <h2 className="header-title">Account</h2>

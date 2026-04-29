@@ -186,9 +186,9 @@ export default function Login() {
           <Link
             id="forgotten-pwd"
             href="/"
-            className="text-cyan-300 underline cursor-pointer text-sm hover:text-blue-700"
+            className="text-black-300 underline cursor-pointer text-sm hover:text-blue-700"
           >
-            Forgot Password?
+            Home Page
           </Link>
         </div>
       </form>
