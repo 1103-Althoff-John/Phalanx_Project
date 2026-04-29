@@ -5,7 +5,7 @@ import User from "@/models/User";
 import { encryptAES} from "@/lib/crypto";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
-import { UserRoundIcon } from "lucide-react";
+
 
 type User_llm_body = {
     apiKey?: string;
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest){
         return(
             NextResponse.json(
                 {
-                    message: "New LLM has been regsitered Successfully",
+                    message: "New LLM has been registered Successfully",
                     Account: {UID: api_set.userId.toString(), KEY: api_set.apiKey},
                     status: 200
                 }       

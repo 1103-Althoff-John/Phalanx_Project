@@ -25,18 +25,29 @@ export function encryptAES(pt: string, aad?: string): string{
     return(iv.toString("base64")+"."+ciphertext.toString("base64")+"."+authTag.toString("base64"));
 }
 
-export function decryptAES(encryptedTxt: string, aad?: string): string{
+export function decryptAES(encryptedTxt: string, aad?: string): string {
     const encryptSegments = encryptedTxt.split(".");
-    if(encryptSegments.length !== 3){
-        throw new Error("Improper encryption format or missing");
+  
+    if (encryptSegments.length !== 3) {
+      throw new Error("Improper encryption format or missing");
     }
+  
     const iv = Buffer.from(encryptSegments[0], "base64");
     const ciphertext = Buffer.from(encryptSegments[1], "base64");
     const authTag = Buffer.from(encryptSegments[2], "base64");
+  
     const decipher = crypto.createDecipheriv("aes-256-gcm", Key, iv);
-    if(aad){
-        decipher.setAAD(Buffer.from(aad,"utf8"));
+  
+    if (aad) {
+      decipher.setAAD(Buffer.from(aad, "utf8"));
     }
-    const decryptedData = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
-    return(decryptedData.toString("utf8"));
-}
+  
+    decipher.setAuthTag(authTag);
+  
+    const decryptedData = Buffer.concat([
+      decipher.update(ciphertext),
+      decipher.final(),
+    ]);
+  
+    return decryptedData.toString("utf8");
+  }

@@ -1,0 +1,14 @@
+# Supported providers: groq, openai, anthropic, mistral, cohere
+
+target_model: "llama-3.1-8b-instant"
+target_provider: "groq"
+
+judge_model: "llama-3.1-8b-instant"
+judge_provider: "groq"
+
+attacks_path: "attacks.json"
+
+results:
+  base_model_name: "llama-3-8b"
+  eval_name: "AlpacaEval"
+  root_dir: "results"
