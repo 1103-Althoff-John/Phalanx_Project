@@ -35,7 +35,18 @@ export default function ReportPage() {
   const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
-    setLastUpdated(new Date().toLocaleString());
+    setLastUpdated(
+      new Date().toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -145,7 +156,18 @@ export default function ReportPage() {
       });
 
       setDisplayedAttacksRan(finalAttackCount);
-      setLastUpdated(new Date().toLocaleString());
+      setLastUpdated(
+        new Date().toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZoneName: "short",
+        })
+      );
     } catch (err) {
       console.error(err);
       setError('Something went wrong while creating the report');
